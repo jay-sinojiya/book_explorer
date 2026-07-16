@@ -1,23 +1,29 @@
-import type { Book } from "../../types/book";
 import BookCard from "../BookCard/BookCard";
-import './BookList.css';
+import Loader from "../Loader/Loader";
 
-interface BookListProps {
-  books: Book[];
-}
+import { useStoreSelector } from "../../hooks/reduxHooks";
 
-const BookList = ({ books }: BookListProps) => {
+const BookList = () => {
+  const { books, loading, error } = useStoreSelector(
+    (state) => state.books
+  );
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   if (books.length === 0) {
-    return <p className="no-books">No books found. Try a different search!</p>;
+    return <p>No books found.</p>;
   }
 
   return (
-    <div className="book-list">
+    <div>
       {books.map((book) => (
-        <BookCard
-          key={book.id}
-          book={book}
-        />
+        <BookCard key={book.id} book={book} />
       ))}
     </div>
   );

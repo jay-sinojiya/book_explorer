@@ -1,16 +1,40 @@
-import { FormEvent, useState } from "react";
-import './SearchForm.css';
+import { type FormEvent, useState } from "react";
+import "./SearchForm.css";
 
-interface SearchFormProps {
-  onSearch: (query: string) => void;
-}
+import { searchBooks } from "../../api/googleBooksApi";
+import {
+  setBooks,
+  setError,
+  setLoading,
+} from "../../features/books/booksSlice";
+import { useStoreDispatch } from "../../hooks/reduxHooks";
 
-const SearchForm = ({ onSearch }: SearchFormProps) => {
-  const [searchBook, setSearchBook] = useState("");
+const SearchForm = () => {
+  const dispatch = useStoreDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSearch(searchBook);
+
+    if (!searchQuery.trim()) return;
+
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+
+    try {
+      const { items } = await searchBooks(searchQuery);
+      dispatch(setBooks(items));
+    } catch (error) {
+      dispatch(
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong."
+        )
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (
@@ -19,9 +43,9 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
         <div className="input-group">
           <input
             type="text"
-            value={searchBook}
             placeholder="Search by title, author, or keyword..."
-            onChange={(e) => setSearchBook(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
