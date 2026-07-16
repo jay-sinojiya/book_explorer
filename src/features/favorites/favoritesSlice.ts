@@ -1,14 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import type { Book } from "../../types/book";
 
 interface FavoritesState {
-  favorites: Book[];
+  books: Book[];
 }
 
 const initialState: FavoritesState = {
-  favorites: [],
+  books: [],
 };
 
 const favoritesSlice = createSlice({
@@ -16,17 +15,17 @@ const favoritesSlice = createSlice({
   initialState,
   reducers: {
     addFavorite(state, action: PayloadAction<Book>) {
-      const exists = state.favorites.find(
+      const exists = state.books.find(
         (book) => book.id === action.payload.id
       );
 
       if (!exists) {
-        state.favorites.push(action.payload);
+        state.books.push(action.payload);
       }
     },
 
     removeFavorite(state, action: PayloadAction<string>) {
-      state.favorites = state.favorites.filter(
+      state.books = state.books.filter(
         (book) => book.id !== action.payload
       );
     },

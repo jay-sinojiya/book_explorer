@@ -1,29 +1,52 @@
 import { Link } from "react-router-dom";
+
 import type { Book } from "../../types/book";
-import './BookCard.css';
+import { addFavorite, removeFavorite } from "../../features/favorites/favoritesSlice";
+import { useStoreDispatch, useStoreSelector } from "../../hooks/reduxHooks";
 
 interface BookCardProps {
   book: Book;
 }
 
 const BookCard = ({ book }: BookCardProps) => {
+  const dispatch = useStoreDispatch();
+
+  const favoriteBooks = useStoreSelector(
+    (state) => state.favorites.books
+  );
+
+  const isFavorite = favoriteBooks.some(
+    (favorite) => favorite.id === book.id
+  );
+
+  const handleFavorite = () => {
+    if (isFavorite) {
+      dispatch(removeFavorite(book.id));
+    } else {
+      dispatch(addFavorite(book));
+    }
+  };
+
   return (
-    <div className="book-card">
-      {book.thumbnail ? (
-        <img
-          src={book.thumbnail}
-          alt={book.title}
-          className="book-card-image"
-        />
-      ) : (
-        <div className="book-card-placeholder">No Cover</div>
-      )}
+    <div>
+      <img
+        src={book.thumbnail}
+        alt={book.title}
+        width={120}
+      />
 
-      <h3 className="book-card-title">{book.title}</h3>
+      <h3>{book.title}</h3>
 
-      <p className="book-card-authors">{book.authors?.join(", ")}</p>
+      <p>{book.authors?.join(", ")}</p>
 
-      <Link to={`/book/${book.id}`} className="book-card-link">
+      <button onClick={handleFavorite}>
+        {isFavorite ? "Remove Favorite" : "Add Favorite"}
+      </button>
+
+      <br />
+      <br />
+
+      <Link to={`/book/${book.id}`}>
         View Details
       </Link>
     </div>
