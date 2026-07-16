@@ -1,75 +1,59 @@
-# React + TypeScript + Vite
+# Book Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React application built to search for books using the Google Books API, view detailed book information, and manage a personal list of favorite books. This project demonstrates proficiency in React fundamentals, global state management, routing, form handling, and performance optimization.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Multi-field Search:** Search for books by Title, Author, and Genre simultaneously.
+- **Form Validation:** Ensures at least one search criterion is provided before querying the API.
+- **Book Details:** Lazy-loaded detailed views for individual books (`/book/:id`).
+- **Favorites Management:** Add and remove books from a personalized favorites list.
+- **Responsive & Accessible:** Built with semantic HTML and ARIA labels to ensure accessibility across devices.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework:** React 19 + TypeScript
+- **Bundler:** Vite
+- **State Management:** Redux Toolkit
+- **Routing:** React Router v7
+- **Styling:** Vanilla CSS (CSS Modules/Global)
 
-## Expanding the ESLint configuration
+## Architecture & Technical Choices
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### State Management
+**Redux Toolkit** was chosen for global state management. It provides a structured, predictable way to manage the `books` search results (including loading and error states) and the `favorites` list. Redux Toolkit's built-in immutability (via Immer) and clear separation of concerns make it scalable for future enhancements.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Routing & Lazy Loading
+**React Router** handles client-side routing. To optimize the initial bundle size and improve load times, the `BookDetailsPage` is dynamically imported using **`React.lazy`** and wrapped in a `<Suspense>` boundary. This ensures that the code for the details page is only fetched when a user actually navigates to it.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Performance Optimization
+To prevent unnecessary re-renders of the large lists of books, the `BookCard` component is wrapped in **`React.memo`**. This guarantees that a book card only re-renders if its specific props change, drastically improving performance when modifying the favorites list.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Setup Instructions
 
-```
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd book_explorer
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open your browser to the local URL provided in the terminal (usually `http://localhost:5173`).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
 
-```
+## Next Steps
+- Implement comprehensive automated tests using Vitest (Jest-compatible) and React Testing Library.
+- Add pagination for search results.
+- Enhance the UI with tailored CSS animations.

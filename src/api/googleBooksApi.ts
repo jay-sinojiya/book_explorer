@@ -3,7 +3,26 @@ import { getBookDetails } from '../utils/getBookDetails';
 
 const API_BASE_URL = 'https://www.googleapis.com/books/v1';
 
-export const searchBooks = async (query: string, startIndex: number = 0, maxResults: number = 10): Promise<{ items: Book[]; totalItems: number }> => {
+export interface SearchParams {
+  title?: string;
+  author?: string;
+  genre?: string;
+  query?: string;
+}
+
+export const searchBooks = async (params: SearchParams | string, startIndex: number = 0, maxResults: number = 10): Promise<{ items: Book[]; totalItems: number }> => {
+  let query = '';
+  
+  if (typeof params === 'string') {
+    query = params;
+  } else {
+    const parts = [];
+    if (params.title) parts.push(`intitle:${params.title}`);
+    if (params.author) parts.push(`inauthor:${params.author}`);
+    if (params.genre) parts.push(`subject:${params.genre}`);
+    if (params.query) parts.push(params.query);
+    query = parts.join('+');
+  }
   if (!query) {
     return { items: [], totalItems: 0 };
   }
