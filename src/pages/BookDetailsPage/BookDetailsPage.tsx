@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getBookById } from '../../api/googleBooksApi';
 import type { Book } from '../../types/book';
+import Loader from '../../components/Loader/Loader';
+import './BookDetailsPage.css';
 
 const BookDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,32 +34,39 @@ const BookDetailsPage = () => {
     fetchBook();
   }, [id]);
 
-  if (isLoading) return <div>Loading book details...</div>;
-  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (isLoading) return <Loader />;
+  if (error) return <div className="error-message">{error}</div>;
   if (!book) return <div>No book details found.</div>;
 
   return (
-    <div>
-      <Link to="/">&larr; Back to Search</Link>
-      <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-        {book.thumbnail && (
-          <img 
-            src={book.thumbnail} 
-            alt={book.title} 
-            style={{ width: '200px', height: 'fit-content' }} 
-          />
-        )}
+    <div className="details-page">
+      <Link to="/" className="back-link">&larr; Back to Search</Link>
+      
+      <div className="details-content">
         <div>
+          {book.thumbnail && (
+            <img 
+              src={book.thumbnail.replace('&zoom=1', '&zoom=2')} // Try to get higher res if possible
+              alt={book.title} 
+              className="details-image"
+            />
+          )}
+        </div>
+        
+        <div className="details-info">
           <h1>{book.title}</h1>
-          {book.authors && <h3>By {book.authors.join(', ')}</h3>}
-          {book.publisher && <p><strong>Publisher:</strong> {book.publisher}</p>}
-          {book.publishedDate && <p><strong>Published Date:</strong> {book.publishedDate}</p>}
-          {book.pageCount && <p><strong>Pages:</strong> {book.pageCount}</p>}
-          {book.categories && <p><strong>Categories:</strong> {book.categories.join(', ')}</p>}
+          {book.authors && <h3 className="details-author">By {book.authors.join(', ')}</h3>}
+          
+          <div className="details-meta">
+            {book.publisher && <div className="meta-item"><strong>Publisher</strong> {book.publisher}</div>}
+            {book.publishedDate && <div className="meta-item"><strong>Published</strong> {book.publishedDate}</div>}
+            {book.pageCount && <div className="meta-item"><strong>Pages</strong> {book.pageCount}</div>}
+            {book.categories && <div className="meta-item"><strong>Category</strong> {book.categories[0]}</div>}
+          </div>
           
           {book.description && (
-            <div style={{ marginTop: '1rem' }}>
-              <h3>Description</h3>
+            <div className="details-description">
+              <h3>Synopsis</h3>
               <p>{book.description}</p>
             </div>
           )}
@@ -67,7 +76,7 @@ const BookDetailsPage = () => {
               href={book.infoLink} 
               target="_blank" 
               rel="noopener noreferrer"
-              style={{ display: 'inline-block', marginTop: '1rem' }}
+              className="details-link"
             >
               View on Google Books
             </a>

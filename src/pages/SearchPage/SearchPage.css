@@ -1,0 +1,24 @@
+.search-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  background: var(--primary-gradient);
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+}
+
+.error-message {
+  color: var(--text-error);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
