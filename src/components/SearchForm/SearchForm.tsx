@@ -1,4 +1,5 @@
 import { type FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 import "./SearchForm.css";
 
 import { searchBooks } from "../../api/googleBooksApi";
@@ -20,7 +21,9 @@ const SearchForm = () => {
     event.preventDefault();
 
     if (!title.trim() && !author.trim() && !genre.trim()) {
-      dispatch(setError("Please fill in at least one search field."));
+      const errMsg = "Please fill in at least one search field.";
+      dispatch(setError(errMsg));
+      toast.error(errMsg, { id: 'search-error' });
       return;
     }
 
@@ -31,13 +34,9 @@ const SearchForm = () => {
       const { items } = await searchBooks({ title, author, genre });
       dispatch(setBooks(items));
     } catch (error) {
-      dispatch(
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Something went wrong."
-        )
-      );
+      const errMsg = error instanceof Error ? error.message : "Something went wrong.";
+      dispatch(setError(errMsg));
+      toast.error(errMsg, { id: 'api-error' });
     } finally {
       dispatch(setLoading(false));
     }

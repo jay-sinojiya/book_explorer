@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { searchBooks } from '../../api/googleBooksApi';
 import type { Book } from '../../types/book';
 import SearchForm from '../../components/SearchForm/SearchForm';
@@ -19,11 +20,9 @@ const SearchPage = () => {
         const result = await searchBooks('bestsellers');
         setBooks(result.items);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Failed to fetch initial books');
-        }
+        const errMsg = err instanceof Error ? err.message : 'Failed to fetch initial books';
+        setError(errMsg);
+        toast.error(errMsg, { id: 'initial-fetch-error' });
       } finally {
         setIsLoading(false);
       }
@@ -42,11 +41,9 @@ const SearchPage = () => {
       const result = await searchBooks(searchBook);
       setBooks(result.items);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Failed to search books');
-      }
+      const errMsg = err instanceof Error ? err.message : 'Failed to search books';
+      setError(errMsg);
+      toast.error(errMsg, { id: 'search-books-error' });
     } finally {
       setIsLoading(false);
     }
@@ -58,8 +55,6 @@ const SearchPage = () => {
       <SearchForm onSearch={handleSearch} />
 
       {isLoading && <Loader />}
-      {error && <p className="error-message">{error}</p>}
-
       {!isLoading && !error && <BookList books={books} />}
     </div>
   );
