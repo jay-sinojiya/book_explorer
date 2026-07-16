@@ -34,7 +34,7 @@ const SearchPage = () => {
 
   const handleSearch = async (query: string) => {
     const searchBook = query.trim();
-    if (!searchBook) return; // Do nothing if search is completely empty
+    if (!searchBook) return;
 
     setIsLoading(true);
     setError(null);

@@ -58,7 +58,7 @@
   font-size: 0.875rem;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
-  flex-grow: 1; /* Pushes the link to the bottom */
+  flex-grow: 1;
 }
 
 .book-card-link {

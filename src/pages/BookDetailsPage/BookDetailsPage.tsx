@@ -46,7 +46,7 @@ const BookDetailsPage = () => {
         <div>
           {book.thumbnail && (
             <img 
-              src={book.thumbnail.replace('&zoom=1', '&zoom=2')} // Try to get higher res if possible
+              src={book.thumbnail.replace('&zoom=1', '&zoom=2')}
               alt={book.title} 
               className="details-image"
             />
