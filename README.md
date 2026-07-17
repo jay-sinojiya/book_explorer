@@ -1,16 +1,16 @@
 # Book Explorer
 
-A modern React application built to search for books using the Google Books API, view detailed book information, and manage a personal list of favorite books. This project demonstrates proficiency in React fundamentals, global state management, routing, form handling, testing, and premium UI/UX design.
+A modern React application for searching books with the Google Books API, viewing detailed book information, and managing a personal favorites list. The project demonstrates React fundamentals, global state management, routing, form handling, testing, and responsive UI design.
 
 ## Features
 
 - **Multi-field Search:** Search for books by Title, Author, and Genre simultaneously.
-- **Premium Aesthetics:** Features a modern "glassmorphism" design system, responsive grid layouts, dynamic hover animations, and custom typography (Inter & Outfit).
+- **Modern Book Cards:** Responsive cards with cover artwork, truncated descriptions, favorite toggles, and details links.
 - **Favorites Management:** Add and remove books from a personalized favorites list using an intuitive heart icon toggle.
-- **API Fallback System:** Includes a robust local fallback mechanism containing 500 dummy books that automatically populates the UI if the Google Books API quota is exhausted.
-- **Global Notifications:** Utilizes `react-hot-toast` for elegant, centralized error and success messaging.
+- **Global Notifications:** Uses `react-hot-toast` for centralized error messaging when API requests fail or validation is needed.
 - **Book Details:** Lazy-loaded detailed views for individual books (`/book/:id`).
-- **Responsive & Accessible:** Built with semantic HTML and ARIA labels to ensure accessibility across all devices.
+- **Responsive & Accessible:** Built with semantic HTML, ARIA labels, and responsive layouts for different screen sizes.
+- **Home Navigation:** The Book Explorer brand link returns users to the search page.
 
 ## Tech Stack
 
@@ -18,7 +18,7 @@ A modern React application built to search for books using the Google Books API,
 - **Bundler:** Vite
 - **State Management:** Redux Toolkit
 - **Routing:** React Router v7
-- **Styling:** Vanilla CSS (CSS Modules & Global tokens)
+- **Styling:** Vanilla CSS with global design tokens
 - **Testing:** Jest & React Testing Library
 
 ## Architecture & Technical Choices
@@ -31,7 +31,7 @@ A modern React application built to search for books using the Google Books API,
 
 ### Automated Testing
 The application is fully covered by an automated testing suite utilizing **Jest** and **React Testing Library**. Tests cover critical functionality, including:
-- API fetching logic and dummy data fallback mechanics.
+- API fetching logic and error handling.
 - Redux slice reducers and actions.
 - Component rendering and user interactions.
 

@@ -57,12 +57,14 @@ const BookDetailsPage = () => {
           <h1>{book.title}</h1>
           {book.authors && <h3 className="details-author">By {book.authors.join(', ')}</h3>}
           
-          <div className="details-meta">
-            {book.publisher && <div className="meta-item"><strong>Publisher</strong> {book.publisher}</div>}
-            {book.publishedDate && <div className="meta-item"><strong>Published</strong> {book.publishedDate}</div>}
-            {book.pageCount && <div className="meta-item"><strong>Pages</strong> {book.pageCount}</div>}
-            {book.categories && <div className="meta-item"><strong>Category</strong> {book.categories[0]}</div>}
-          </div>
+          {(book.publisher || book.publishedDate || book.pageCount || book.categories) && (
+            <div className="details-meta">
+              {book.publisher && <div className="meta-item"><strong>Publisher</strong> {book.publisher}</div>}
+              {book.publishedDate && <div className="meta-item"><strong>Published</strong> {book.publishedDate}</div>}
+              {book.pageCount && <div className="meta-item"><strong>Pages</strong> {book.pageCount}</div>}
+              {book.categories && <div className="meta-item"><strong>Category</strong> {book.categories[0]}</div>}
+            </div>
+          )}
           
           {book.description && (
             <div className="details-description">

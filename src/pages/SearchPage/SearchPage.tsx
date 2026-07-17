@@ -1,61 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { searchBooks } from '../../api/googleBooksApi';
-import type { Book } from '../../types/book';
 import SearchForm from '../../components/SearchForm/SearchForm';
 import BookList from '../../components/BookList/BookList';
-import Loader from '../../components/Loader/Loader';
+import { useStoreDispatch } from '../../hooks/reduxHooks';
+import { setBooks, setError, setLoading } from '../../features/books/booksSlice';
 import './SearchPage.css';
 
 const SearchPage = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useStoreDispatch();
 
   useEffect(() => {
     const fetchInitialBooks = async () => {
-      setIsLoading(true);
-      setError(null);
+      dispatch(setLoading(true));
+      dispatch(setError(null));
       try {
         const result = await searchBooks('bestsellers');
-        setBooks(result.items);
+        dispatch(setBooks(result.items));
       } catch (err: unknown) {
         const errMsg = err instanceof Error ? err.message : 'Failed to fetch initial books';
-        setError(errMsg);
+        dispatch(setError(errMsg));
         toast.error(errMsg, { id: 'initial-fetch-error' });
       } finally {
-        setIsLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     fetchInitialBooks();
-  }, []);
-
-  const handleSearch = async (query: string) => {
-    const searchBook = query.trim();
-    if (!searchBook) return;
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await searchBooks(searchBook);
-      setBooks(result.items);
-    } catch (err: unknown) {
-      const errMsg = err instanceof Error ? err.message : 'Failed to search books';
-      setError(errMsg);
-      toast.error(errMsg, { id: 'search-books-error' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [dispatch]);
 
   return (
     <div className="search-page">
       <h1 className="page-title">Discover Books</h1>
-      <SearchForm onSearch={handleSearch} />
-
-      {isLoading && <Loader />}
-      {!isLoading && !error && <BookList books={books} />}
+      <SearchForm />
+      <BookList />
     </div>
   );
 };

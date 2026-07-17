@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import type { Book } from "../../types/book";
 import { addFavorite, removeFavorite } from "../../features/favorites/favoritesSlice";
 import { useStoreDispatch, useStoreSelector } from "../../hooks/reduxHooks";
+import "./BookCard.css";
 
 interface BookCardProps {
   book: Book;
@@ -28,41 +29,43 @@ const BookCard = React.memo(({ book }: BookCardProps) => {
     }
   };
 
-  const truncatedDescription = book.description && book.description.length > 100 
-    ? book.description.substring(0, 100) + "..."
-    : book.description;
+  const truncatedDescription =
+    book.description?.slice(0, 80) +
+    (book.description && book.description.length > 80 ? "..." : "");
 
   return (
     <div className="book-card" aria-label={`Book: ${book.title}`}>
+      <button 
+        className={`favorite-icon-btn ${isFavorite ? 'is-favorite' : ''}`}
+        onClick={handleFavorite}
+        aria-label={isFavorite ? `Remove ${book.title} from favorites` : `Add ${book.title} to favorites`}
+      >
+        {isFavorite ? "♥" : "♡"}
+      </button>
+
       <img
-        src={book.thumbnail || "https://via.placeholder.com/120x180?text=No+Cover"}
+        src={book.thumbnail as string}
         alt={`Cover of ${book.title}`}
-        width={120}
+        className="book-card-image"
       />
 
-      <h3>{book.title}</h3>
+      <h3 className="book-card-title">{book.title}</h3>
 
-      <p aria-label="Authors">{book.authors?.join(", ") || "Unknown Author"}</p>
+      <p className="book-card-authors" aria-label="Authors">
+        {book.authors?.join(", ") || "Unknown Author"}
+      </p>
       
       {truncatedDescription && (
-        <p className="book-description" aria-label="Description">
+        <p className="book-card-description" aria-label="Description">
           {truncatedDescription}
         </p>
       )}
 
-      <button 
-        onClick={handleFavorite}
-        aria-label={isFavorite ? `Remove ${book.title} from favorites` : `Add ${book.title} to favorites`}
-      >
-        {isFavorite ? "Remove Favorite" : "Add Favorite"}
-      </button>
-
-      <br />
-      <br />
-
-      <Link to={`/book/${book.id}`} aria-label={`View details for ${book.title}`}>
-        View Details
-      </Link>
+      <div className="book-card-actions">
+        <Link to={`/book/${book.id}`} className="book-card-link" aria-label={`View details for ${book.title}`}>
+          View Details
+        </Link>
+      </div>
     </div>
   );
 });
